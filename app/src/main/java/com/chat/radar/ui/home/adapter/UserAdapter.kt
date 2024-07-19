@@ -17,6 +17,10 @@ import com.chat.radar.data.model.UserModel
 import com.android.chat_redar.R
 import com.chat.radar.common.Constants.EMPTY
 import com.chat.radar.common.Constants.FIREBASE_KEY_CHATS
+import com.chat.radar.common.Constants.FIREBASE_KEY_SEEN
+import com.chat.radar.common.Constants.FIREBASE_KEY_STATUS
+import com.chat.radar.common.Constants.FIREBASE_KEY_STATUSES
+import com.chat.radar.common.Constants.ONLINE
 import com.chat.radar.ui.chat.ChatActivity
 import com.chat.radar.ui.home.HomeFragment
 import com.chat.radar.ui.imageview.ViewImageActivity
@@ -94,7 +98,7 @@ class UserAdapter(
                     ) {
 
                         if (chat.recieverId == fuser?.uid) {
-                            if (chat.messageStatus == "Seen") {
+                            if (chat.messageStatus == FIREBASE_KEY_SEEN) {
                                 holder.tvLastMessage.setTypeface(null, Typeface.NORMAL)
                                 holder.imgUnreadMessage.visibility = View.GONE
                                 holder.tvMessageCount.visibility = View.GONE
@@ -113,7 +117,7 @@ class UserAdapter(
                             holder.tvLastMessage.text = chat.message
                         }
 
-                        if (chat.messageStatus.equals("Seen")) {
+                        if (chat.messageStatus == FIREBASE_KEY_SEEN) {
                             holder.imgSeen.setImageResource(R.drawable.ic_seen)
                         } else {
                             holder.imgSeen.setImageResource(R.drawable.ic_delivered)
@@ -128,13 +132,13 @@ class UserAdapter(
 
     private fun checkUserStatus(id: String, holder: MyViewHolder) {
         val userRef: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference().child("Statuses")
+            FirebaseDatabase.getInstance().reference.child(FIREBASE_KEY_STATUSES)
         userRef.child(id).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
-                val status: String = dataSnapshot.child("status").value.toString()
+                val status: String = dataSnapshot.child(FIREBASE_KEY_STATUS).value.toString()
                 if (status.isNotEmpty()) {
                     holder.imgOnline.visibility = View.VISIBLE
-                    if (status == "online") {
+                    if (status == ONLINE) {
                         holder.imgOnline.setImageResource(R.drawable.online_circle)
                     } else {
                         holder.imgOnline.setImageResource(R.drawable.offline_circle)

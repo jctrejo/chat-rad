@@ -14,6 +14,8 @@ class AuthViewModel @Inject constructor(
     val repository: AuthRepository
 ): ViewModel() {
 
+    // Ejemplo de estructura MVVM para FIREBASE
+
     private val _register = MutableLiveData<UiState<String>>()
     val register: LiveData<UiState<String>>
             get() = _register

@@ -15,6 +15,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import com.android.chat_redar.R
+import com.chat.radar.common.Constants.FIREBASE_KEY_SEEN
 import com.chat.radar.data.model.ChatModel
 import com.chat.radar.ui.chat.ChatActivity
 import com.chat.radar.ui.imageview.ViewImageActivity
@@ -132,7 +133,7 @@ class ChatAdapter(
             holder.tvMessage.show()
         }
 
-        if (chatModel.messageStatus == "Seen") {
+        if (chatModel.messageStatus == FIREBASE_KEY_SEEN) {
             holder.imgSeen.setImageResource(R.drawable.ic_seen)
         } else {
             holder.imgSeen.setImageResource(R.drawable.ic_delivered)

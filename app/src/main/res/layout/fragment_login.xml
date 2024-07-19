@@ -86,7 +86,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/email_edit_text"
-                    android:text="jose@gmail.com"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
@@ -111,7 +110,6 @@
                     android:id="@+id/password_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="qwerty123"
                     android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>

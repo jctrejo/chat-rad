@@ -6,6 +6,10 @@ object Constants {
     const val FIREBASE_KEY_STATUSES = "Statuses"
     const val FIREBASE_KEY_STATUS = "status"
     const val FIREBASE_KEY_CHATS = "Chats"
+    const val FIREBASE_KEY_DELIVERED = "Delivered"
+    const val FIREBASE_KEY_SEEN = "Seen"
+    const val FIREBASE_KEY_LAST_SEEN = "lastSeen"
+    const val FIREBASE_KEY_USERS = "Users"
 
     // GENERAL
     const val EMPTY = ""
@@ -31,5 +35,4 @@ object Constants {
     const val EXTRA_SENDER_NAME = "senderName"
     const val EXTRA_RECIEVER_PICTURE = "recieverPic"
     const val EXTRA_SENDER_PICTURE = "senderPic"
-
 }

@@ -14,6 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.android.chat_redar.R
 import com.android.chat_redar.databinding.FragmentRegisterBinding
+import com.chat.radar.common.Constants.EMPTY
+import com.chat.radar.common.Constants.FIREBASE_KEY_USERS
+import com.chat.radar.common.Constants.IMAGE
+import com.chat.radar.common.Constants.JPG
 import com.chat.radar.common.UiState
 import com.chat.radar.data.model.User
 import com.chat.radar.util.AlertErrorDialog
@@ -39,9 +43,7 @@ import java.util.UUID
 class RegisterFragment : Fragment() {
 
     private lateinit var binding: FragmentRegisterBinding
-    private lateinit var errorMessage: AlertErrorDialog
     private lateinit var loader: LoadingDialog
-    private val viewModel: AuthViewModel by viewModels()
     private var auth: FirebaseAuth? = null
     private var rootRef: DatabaseReference? = null
     private var userRef: DatabaseReference? = null
@@ -63,41 +65,27 @@ class RegisterFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        loader = LoadingDialog(binding.root.context)
-        errorMessage = AlertErrorDialog(requireContext())
-
-        //observer()
-
-       /* registerBtn.setOnClickListener {
-            if (validateData()) {
-                viewModel.register(
-                    email = emailEditText.text.toString(),
-                    password = passwordEditText.text.toString(),
-                    user = getUserObj()
-                )
-            }
-        }*/
-
+        loader = LoadingDialog(root.context)
         auth = FirebaseAuth.getInstance()
         rootRef = FirebaseDatabase.getInstance().reference
 
-        binding.registerBtn.setOnClickListener {
+        registerBtn.setOnClickListener(View.OnClickListener {
             val name = firstNameEt.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
-            val aboutInfo = lastNameEt.text.toString().trim()
+            val lastName = lastNameEt.text.toString().trim()
 
             if (!validateData()) {
-                return@setOnClickListener
+                return@OnClickListener
             } else {
                 customProgressDialog?.show()
-                getToken(name, email, password, imageUrl ?: "", aboutInfo)
+                getToken(name, email, password, imageUrl ?: EMPTY, lastName)
             }
-        }
+        })
 
-        binding.imgAddImage.setOnClickListener {
+        imgAddImage.setOnClickListener {
             val intent = Intent()
-            intent.type = "image/*"
+            intent.type = IMAGE
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(intent, imageRequestCode)
         }
@@ -115,7 +103,10 @@ class RegisterFragment : Fragment() {
                 val token = task.result
                 register(name, email, password, token, imageUrl, aboutInfo)
             } else {
-                StaticFunctions.ShowToast(requireActivity(), task.exception?.localizedMessage!!)
+                StaticFunctions.ShowToast(
+                    requireActivity().applicationContext,
+                    task.exception?.localizedMessage ?: EMPTY
+                )
             }
         }
     }
@@ -128,35 +119,38 @@ class RegisterFragment : Fragment() {
         imageUrl: String,
         aboutInfo: String,
     ) {
-        auth!!.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+        auth?.createUserWithEmailAndPassword(email, password)?.addOnCompleteListener { task ->
             customProgressDialog?.dismiss()
             if (task.isSuccessful) {
                 val firebaseUser = auth?.currentUser
                 val userid = firebaseUser?.uid
                 val hashMap: HashMap<String, String> = HashMap()
-                hashMap["id"] = userid ?: ""
+                hashMap["id"] = userid ?: EMPTY
                 hashMap["name"] = name
                 hashMap["email"] = email
                 hashMap["password"] = password
                 hashMap["token"] = token
                 hashMap["profilePic"] = imageUrl
                 hashMap["aboutInfo"] = aboutInfo
-                userRef = rootRef?.child("Users")?.child(userid ?: "")
+                userRef = rootRef?.child(FIREBASE_KEY_USERS)?.child(userid ?: EMPTY)
                 userRef?.setValue(hashMap)?.addOnCompleteListener {
                     if (it.isSuccessful) {
-                        StaticFunctions.ShowToast(requireActivity(), "Registered Successfully")
-                        requireActivity().onBackPressed()
+                        StaticFunctions.ShowToast(
+                            requireActivity().applicationContext,
+                            "Registered Successfully"
+                        )
+                        findNavController().popBackStack()
                     } else {
                         StaticFunctions.ShowToast(
-                            requireActivity(),
-                            task.exception?.localizedMessage!!
+                            requireActivity().applicationContext,
+                            task.exception?.localizedMessage ?: EMPTY
                         )
                     }
                 }
             } else {
                 StaticFunctions.ShowToast(
-                    requireActivity(),
-                    "Error: " + task.exception?.localizedMessage!!
+                    requireActivity().applicationContext,
+                    "Error: " + task.exception?.localizedMessage ?: EMPTY
                 )
             }
         }
@@ -171,15 +165,14 @@ class RegisterFragment : Fragment() {
         ) {
             customProgressDialog?.show()
             val fileUri = data.data
-            val bitmap =
-                MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, fileUri)
+            val bitmap = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, fileUri)
             binding.imgProfile.setImageBitmap(bitmap)
             fileUri?.let { uploadImageToFirebase(it) }
         }
     }
 
     private fun uploadImageToFirebase(fileUri: Uri) {
-        val fileName = UUID.randomUUID().toString() + ".jpg"
+        val fileName = UUID.randomUUID().toString() + JPG
         val refStorage = FirebaseStorage.getInstance().reference.child("profilePictures/$fileName")
 
         refStorage.putFile(fileUri)
@@ -195,41 +188,9 @@ class RegisterFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            requireActivity().finish()
+            findNavController().popBackStack()
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun observer() {
-        viewModel.register.observe(viewLifecycleOwner) { state ->
-            when(state) {
-                is UiState.Loading -> {
-                    binding.registerBtn.text = ""
-                    loader.show()
-                }
-
-                is UiState.Failure -> {
-                    binding.registerBtn.text = "Registro"
-                    loader.dismiss()
-                    errorMessage.typeMessage(AlertErrorDialog.TypeErrorDialog.CUSTOM, state.error)
-                }
-
-                is UiState.Success -> {
-                    loader.dismiss()
-                    binding.registerBtn.text = "Registro"
-                    findNavController().navigate(R.id.action_registerFragment_to_home_navigation)
-                }
-            }
-        }
-    }
-
-    private fun getUserObj(): User {
-        return User(
-            id = "",
-            first_name = binding.firstNameEt.text.toString(),
-            last_name = binding.lastNameEt.text.toString(),
-            email = binding.emailEditText.text.toString(),
-        )
     }
 
     private fun validateData(): Boolean = with(binding) {

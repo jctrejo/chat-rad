@@ -24,7 +24,6 @@ import com.android.chat_redar.databinding.FragmentLoginBinding
 import com.chat.radar.common.Constants
 import com.chat.radar.di.DataProvider
 import com.chat.radar.ui.register.AuthViewModel
-import com.chat.radar.ui.register.RegisterActivity
 import com.chat.radar.util.StaticFunctions.Companion.ShowToast
 import com.google.firebase.auth.FirebaseAuth
 import com.karumi.dexter.Dexter
@@ -94,8 +93,7 @@ class LoginFragment : Fragment() {
             }
         }
         binding.registerLoginBtn.setOnClickListener {
-            val intent = Intent(requireActivity(), RegisterActivity::class.java)
-            startActivity(intent)
+            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
     }
 

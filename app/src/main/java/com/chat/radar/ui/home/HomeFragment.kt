@@ -17,11 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android.chat_redar.R
 import com.android.chat_redar.databinding.HomeBinding
 import com.chat.radar.common.Constants
+import com.chat.radar.common.Constants.FIREBASE_KEY_LAST_SEEN
+import com.chat.radar.common.Constants.FIREBASE_KEY_STATUS
+import com.chat.radar.common.Constants.FIREBASE_KEY_STATUSES
+import com.chat.radar.common.Constants.FIREBASE_KEY_USERS
+import com.chat.radar.common.Constants.ONLINE
 import com.chat.radar.data.model.UserModel
 import com.chat.radar.ui.home.adapter.UserAdapter
 import com.chat.radar.ui.imageview.ViewImageActivity
 import com.chat.radar.util.LoadingDialog
 import com.chat.radar.util.StaticFunctions
+import com.chat.radar.util.glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -94,7 +100,7 @@ class HomeFragment : Fragment() {
             if (task.isSuccessful) {
                 val token = task.result
                 val firebaseUser = FirebaseAuth.getInstance().currentUser
-                val reference = FirebaseDatabase.getInstance().getReference("Users")
+                val reference = FirebaseDatabase.getInstance().getReference(FIREBASE_KEY_USERS)
                 reference.child(firebaseUser?.uid ?: Constants.EMPTY).child("token").setValue(token)
             } else {
                 StaticFunctions.ShowToast(contextBinding.applicationContext, task.exception?.localizedMessage?: Constants.EMPTY)
@@ -106,7 +112,7 @@ class HomeFragment : Fragment() {
         list?.clear()
         loader.show()
         val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val reference = FirebaseDatabase.getInstance().getReference("Users")
+        val reference = FirebaseDatabase.getInstance().getReference(FIREBASE_KEY_USERS)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {
                 list?.clear()
@@ -120,8 +126,7 @@ class HomeFragment : Fragment() {
                         recieverId = user?.id ?: Constants.EMPTY
                         userName = user?.name ?: Constants.EMPTY
                         binding.tvName.text = user?.name
-                        Picasso.get().load(profileUrl).placeholder(R.drawable.ic_user)
-                            .into(binding.profilePic)
+                        if (profileUrl.isNotEmpty()) binding.profilePic.glide(requireActivity(), profileUrl)
                     }
                 }
                 adapter = UserAdapter(this@HomeFragment, list ?: ArrayList(), userName, profileUrl)
@@ -134,26 +139,26 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        setStatus("online", 0)
+        setStatus(ONLINE, 0)
     }
 
     private fun setStatus(userStatus: String, logoutOrSetStatus: Int) {
         Handler(Looper.getMainLooper()).post {
             val userRef: DatabaseReference =
-                FirebaseDatabase.getInstance().reference.child("Statuses")
+                FirebaseDatabase.getInstance().reference.child(FIREBASE_KEY_STATUSES)
             val auth: FirebaseAuth = FirebaseAuth.getInstance()
             val firebaseUser = auth.currentUser
             if (logoutOrSetStatus == 1) {
                 val hashMap: HashMap<String, String> = HashMap()
-                hashMap["status"] = userStatus
-                hashMap["lastSeen"] = StaticFunctions.GetCurrentDateAndTime()
+                hashMap[FIREBASE_KEY_STATUS] = userStatus
+                hashMap[FIREBASE_KEY_LAST_SEEN] = StaticFunctions.GetCurrentDateAndTime()
                 userRef.child(firebaseUser?.uid ?: Constants.EMPTY).setValue(hashMap)
                 this.auth?.signOut()
                 findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
             } else {
                 val hashMap: HashMap<String, String> = HashMap()
-                hashMap["status"] = userStatus
-                hashMap["lastSeen"] = StaticFunctions.GetCurrentDateAndTime()
+                hashMap[FIREBASE_KEY_STATUS] = userStatus
+                hashMap[FIREBASE_KEY_LAST_SEEN] = StaticFunctions.GetCurrentDateAndTime()
                 userRef.child(firebaseUser?.uid ?: Constants.EMPTY).setValue(hashMap)
             }
         }
