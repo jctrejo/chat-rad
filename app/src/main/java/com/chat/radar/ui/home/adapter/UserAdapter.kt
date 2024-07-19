@@ -16,6 +16,7 @@ import com.chat.radar.data.model.ChatModel
 import com.chat.radar.data.model.UserModel
 import com.android.chat_redar.R
 import com.chat.radar.common.Constants.EMPTY
+import com.chat.radar.common.Constants.FIREBASE_KEY_CHATS
 import com.chat.radar.ui.chat.ChatActivity
 import com.chat.radar.ui.home.HomeFragment
 import com.chat.radar.ui.imageview.ViewImageActivity
@@ -81,7 +82,7 @@ class UserAdapter(
     }
 
     private fun lastMessage(userId: String, holder: MyViewHolder) {
-        val chatRefrence = FirebaseDatabase.getInstance().reference.child("Chats")
+        val chatRefrence = FirebaseDatabase.getInstance().reference.child(FIREBASE_KEY_CHATS)
         val fuser = FirebaseAuth.getInstance().currentUser
         chatRefrence.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(@NonNull dataSnapshot: DataSnapshot) {

@@ -5,7 +5,7 @@ object Constants {
     // FIREBASE_KEY
     const val FIREBASE_KEY_STATUSES = "Statuses"
     const val FIREBASE_KEY_STATUS = "status"
-    const val FIREBASE_KEY_LAST_SEEN = "lastSeen"
+    const val FIREBASE_KEY_CHATS = "Chats"
 
     // GENERAL
     const val EMPTY = ""
@@ -14,6 +14,7 @@ object Constants {
     const val ONLINE = "online"
     const val SPOT = "."
     const val JPG = ".jpg"
+    const val IMAGE = "image/*"
 
     // API_KEY
     const val BASE_URL = "https://api.base.com/"
