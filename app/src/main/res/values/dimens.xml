@@ -1,0 +1,50 @@
+<resources>
+      <dimen name="fab_margin">16dp</dimen>
+    <dimen name="list_item_spacing">16dp</dimen>
+    <dimen name="list_item_spacing_half">8dp</dimen>
+
+    //Width
+    <dimen name="width_0">0dp</dimen>
+    <dimen name="width_1">1dp</dimen>
+    <dimen name="width_24">24dp</dimen>
+    <dimen name="width_30">30dp</dimen>
+    <dimen name="width_36">36dp</dimen>
+    <dimen name="width_100">100dp</dimen>
+
+    //Height
+    <dimen name="height_0">0dp</dimen>
+    <dimen name="height_1">1dp</dimen>
+    <dimen name="height_24">24dp</dimen>
+    <dimen name="height_30">30dp</dimen>
+    <dimen name="height_36">36dp</dimen>
+    <dimen name="height_60">60dp</dimen>
+    <dimen name="height_70">70dp</dimen>
+
+    //SIze
+    <dimen name="size_0">0dp</dimen>
+
+    //Font
+    <dimen name="font_0">0sp</dimen>
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_15">15sp</dimen>
+    <dimen name="font_16">18sp</dimen>
+    <dimen name="font_18">18sp</dimen>
+    <dimen name="font_30">30sp</dimen>
+
+    //Padding/Margin
+    <dimen name="margin_padding_0">0dp</dimen>
+    <dimen name="margin_padding_1">1dp</dimen>
+    <dimen name="margin_padding_5">5dp</dimen>
+    <dimen name="margin_padding_10">10dp</dimen>
+    <dimen name="margin_padding_16">16dp</dimen>
+    <dimen name="margin_padding_20">20dp</dimen>
+    <dimen name="margin_padding_25">25dp</dimen>
+    <dimen name="margin_padding_4">4dp</dimen>
+    <dimen name="margin_padding_8">8dp</dimen>
+    <dimen name="margin_padding_24">24dp</dimen>
+    <dimen name="margin_padding_30">30dp</dimen>
+    <dimen name="margin_padding_32">32dp</dimen>
+    <dimen name="margin_padding_40">40dp</dimen>
+    <dimen name="margin_padding_55">55dp</dimen>
+</resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/imageMenu"
+        android:icon="@drawable/ic_image"
+        android:iconTint="@color/purple_700"
+        android:title="Imagen" />
+
+    <item
+        android:id="@+id/fileMenu"
+        android:icon="@drawable/ic_attach_file"
+        android:iconTint="@color/purple_700"
+        android:title="Archivo" />
+
+    <item
+        android:id="@+id/voiceMenu"
+        android:icon="@drawable/ic_mic"
+        android:iconTint="@color/purple_700"
+        android:title="Audio" />
+
+</menu>

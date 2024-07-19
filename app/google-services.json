@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1084712041475",
+    "firebase_url": "https://chat-radar-7c59c-default-rtdb.firebaseio.com",
+    "project_id": "chat-radar-7c59c",
+    "storage_bucket": "chat-radar-7c59c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084712041475:android:4e9f1186dd3cdbc103a236",
+        "android_client_info": {
+          "package_name": "com.android.chat_redar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsMg7BxjXRdmkAYQAfpA3M9CZEfDZaND8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
